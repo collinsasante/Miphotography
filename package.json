@@ -6,21 +6,50 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "build:cf": "opennextjs-cloudflare build",
+    "preview": "opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare deploy"
   },
   "dependencies": {
-    "next": "16.2.0",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "@hookform/resolvers": "^5.2.2",
+    "@radix-ui/react-accordion": "^1.2.12",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@radix-ui/react-toast": "^1.2.15",
+    "airtable": "^0.12.2",
+    "class-variance-authority": "^0.7.1",
+    "cloudinary": "^2.9.0",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "firebase": "^12.11.0",
+    "firebase-admin": "^13.7.0",
+    "framer-motion": "^12.38.0",
+    "googleapis": "^171.4.0",
+    "jose": "^6.2.2",
+    "jszip": "^3.10.1",
+    "lucide-react": "^0.577.0",
+    "next": "15.5.10",
+    "react": "^19.2.4",
+    "react-day-picker": "^9.14.0",
+    "react-dom": "^19.2.4",
+    "react-dropzone": "^15.0.0",
+    "react-hook-form": "^7.71.2",
+    "resend": "^6.9.4",
+    "tailwind-merge": "^3.5.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^1.17.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.0",
+    "nodemon": "^3.1.14",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.76.0"
   }
 }
