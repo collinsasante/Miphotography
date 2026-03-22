@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyFirebaseToken } from "@/lib/firebase-verify";
 import { createInviteLink } from "@/lib/firebase-admin";
-import { findAll, create, update, destroy, Tables } from "@/lib/airtable";
+import { findAll, create, update, Tables } from "@/lib/airtable";
 import { sendEmail, inviteEmail } from "@/lib/email";
 import type { AirtableUser } from "@/lib/airtable";
 

@@ -1,6 +1,5 @@
 import { findAll, Tables } from "@/lib/airtable";
 import type { AirtableInquiry } from "@/lib/airtable";
-import { format } from "date-fns";
 import Link from "next/link";
 import { InquiryItem } from "./InquiryItem";
 

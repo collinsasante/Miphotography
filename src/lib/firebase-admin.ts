@@ -1,75 +1,110 @@
 /**
- * Firebase Admin SDK — server-only.
- * Lazy-initialized so it never runs during client-side rendering or at build time
- * when env vars may not be present.
+ * Firebase Admin operations via REST API.
+ * Uses JOSE for service account JWT signing — fully compatible with Cloudflare Workers.
+ * Does NOT import firebase-admin SDK.
  */
-import type { App } from "firebase-admin/app";
+import { SignJWT, importPKCS8 } from "jose";
 
-let _app: App | null = null;
+const PROJECT_ID   = process.env.FIREBASE_PROJECT_ID   ?? "";
+const CLIENT_EMAIL = process.env.FIREBASE_CLIENT_EMAIL ?? "";
+const PRIVATE_KEY  = () => (process.env.FIREBASE_PRIVATE_KEY ?? "").replace(/\\n/g, "\n");
 
-function getAdminApp(): App {
-  if (_app) return _app;
+/** Exchange a service-account JWT for a Google access token. */
+async function getAccessToken(): Promise<string> {
+  const key = await importPKCS8(PRIVATE_KEY(), "RS256");
+  const now = Math.floor(Date.now() / 1000);
 
-  // Dynamic require so this module is never bundled into the client
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { initializeApp, getApps, cert } = require("firebase-admin/app");
+  const assertion = await new SignJWT({
+    scope: "https://www.googleapis.com/auth/firebase.auth https://www.googleapis.com/auth/identitytoolkit",
+  })
+    .setProtectedHeader({ alg: "RS256", typ: "JWT" })
+    .setIssuer(CLIENT_EMAIL)
+    .setSubject(CLIENT_EMAIL)
+    .setAudience("https://oauth2.googleapis.com/token")
+    .setIssuedAt(now)
+    .setExpirationTime(now + 3600)
+    .sign(key);
 
-  if (getApps().length) {
-    _app = getApps()[0] as App;
-    return _app;
-  }
-
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
-
-  _app = initializeApp({
-    credential: cert({
-      projectId:   process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey,
+  const res = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+      assertion,
     }),
-  }) as App;
+  });
 
-  return _app;
+  const data = await res.json() as { access_token?: string };
+  if (!data.access_token) throw new Error("Failed to obtain Google access token");
+  return data.access_token;
+}
+
+/** Create a Firebase Auth user if one doesn't exist for the given email. */
+async function ensureFirebaseUser(email: string, token: string): Promise<void> {
+  // Check if user exists
+  const lookupRes = await fetch(
+    `https://identitytoolkit.googleapis.com/v1/projects/${PROJECT_ID}/accounts:lookup`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ email: [email] }),
+    }
+  );
+  const lookupData = await lookupRes.json() as { users?: unknown[] };
+  if ((lookupData.users?.length ?? 0) > 0) return;
+
+  // Create user
+  await fetch(
+    `https://identitytoolkit.googleapis.com/v1/projects/${PROJECT_ID}/accounts`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ email }),
+    }
+  );
+}
+
+/** Get an oobLink for password reset without sending an email (admin-only). */
+async function getOobLink(
+  email: string,
+  token: string,
+  requestType: "PASSWORD_RESET" | "VERIFY_EMAIL"
+): Promise<string> {
+  const res = await fetch(
+    `https://identitytoolkit.googleapis.com/v1/projects/${PROJECT_ID}/accounts:sendOobCode`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ requestType, email, returnOobLink: true }),
+    }
+  );
+  const data = await res.json() as { oobLink?: string };
+  if (!data.oobLink) throw new Error("Failed to generate oob link");
+  return data.oobLink;
 }
 
 /**
- * Creates a Firebase Auth user if one doesn't already exist for the given email,
- * then generates a password-reset link and rewrites it as a "set password" invite link.
- *
- * Returns: `${APP_URL}/set-password?oobCode=<code>`
+ * Creates a Firebase Auth user if needed, then returns a custom invite link
+ * pointing to the app's set-password page.
  */
 export async function createInviteLink(email: string): Promise<string> {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { getAuth } = require("firebase-admin/auth");
-  const adminAuth = getAuth(getAdminApp());
+  const token   = await getAccessToken();
+  await ensureFirebaseUser(email, token);
 
-  // Create user if they don't exist yet
-  try {
-    await adminAuth.getUserByEmail(email);
-  } catch {
-    // User not found — create them
-    await adminAuth.createUser({ email });
-  }
-
-  const fullLink: string = await adminAuth.generatePasswordResetLink(email);
-  const oobCode = new URL(fullLink).searchParams.get("oobCode");
+  const oobLink = await getOobLink(email, token, "PASSWORD_RESET");
+  const oobCode = new URL(oobLink).searchParams.get("oobCode");
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
   return `${appUrl}/set-password?oobCode=${oobCode}`;
 }
 
 /**
- * Generates a password reset link and rewrites it to your custom reset-password page.
- *
- * Returns: `${APP_URL}/reset-password?oobCode=<code>`
+ * Returns a custom password-reset link pointing to the app's reset-password page.
  */
 export async function createPasswordResetLink(email: string): Promise<string> {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { getAuth } = require("firebase-admin/auth");
-  const adminAuth = getAuth(getAdminApp());
-
-  const fullLink: string = await adminAuth.generatePasswordResetLink(email);
-  const oobCode = new URL(fullLink).searchParams.get("oobCode");
+  const token   = await getAccessToken();
+  const oobLink = await getOobLink(email, token, "PASSWORD_RESET");
+  const oobCode = new URL(oobLink).searchParams.get("oobCode");
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
   return `${appUrl}/reset-password?oobCode=${oobCode}`;

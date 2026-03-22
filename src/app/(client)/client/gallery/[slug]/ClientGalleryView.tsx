@@ -7,6 +7,7 @@ import { Lightbox, type LightboxImage } from "@/components/gallery/Lightbox";
 import { FavoriteButton } from "@/components/gallery/FavoriteButton";
 import { BulkDownloadButton } from "@/components/gallery/BulkDownloadButton";
 import type { AirtableClientGallery } from "@/lib/airtable";
+import { Heart } from "lucide-react";
 
 interface DisplayImage {
   id: string;

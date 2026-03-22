@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyFirebaseToken } from "@/lib/firebase-verify";
+import { verifyFirebaseToken } from "@/lib/firebase-edge";
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
