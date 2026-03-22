@@ -1,12 +1,11 @@
 name = "miphotography"
+main = ".open-next/worker.js"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = ".open-next/assets"
-main = ".open-next/worker.js"
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
 
 [vars]
-NEXT_PUBLIC_APP_URL = "https://miphotography.pages.dev"
-
-# Production environment overrides
-[env.production]
-name = "miphotography-prod"
+NEXT_PUBLIC_APP_URL = "https://miphotography.mr-asanteeprog.workers.dev"
