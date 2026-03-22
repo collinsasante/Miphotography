@@ -44,7 +44,7 @@ function PackageForm({
 
   return (
     <form onSubmit={handleSubmit} className="bg-[#FAFAF9] border border-[#E8E4DF] p-5 space-y-4">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>Name *</label>
           <input value={name} onChange={(e) => setName(e.target.value)} required className={inputClass} placeholder="Portrait Session" />
@@ -187,7 +187,7 @@ function TestimonialForm({
 
   return (
     <form onSubmit={handleSubmit} className="bg-[#FAFAF9] border border-[#E8E4DF] p-5 space-y-4">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>Client Name *</label>
           <input value={clientName} onChange={(e) => setClientName(e.target.value)} required className={inputClass} placeholder="Jane Smith" />
@@ -201,7 +201,7 @@ function TestimonialForm({
         <label className={labelClass}>Review *</label>
         <textarea value={body} onChange={(e) => setBody(e.target.value)} required rows={3} className={`${inputClass} resize-none`} placeholder="What the client said…" />
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>Rating (1–5)</label>
           <input value={rating} onChange={(e) => setRating(parseInt(e.target.value))} type="number" min="1" max="5" className={inputClass} />
@@ -360,7 +360,7 @@ function AvailabilityTab({ initial }: { initial: AirtableAvailability[] }) {
       </div>
       {adding && (
         <form onSubmit={handleAdd} className="bg-[#FAFAF9] border border-[#E8E4DF] p-5 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelClass}>Start Date *</label>
               <input type="date" value={start} onChange={(e) => setStart(e.target.value)} required className={inputClass} />
@@ -429,12 +429,12 @@ export function ContentManager({
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-[#E8E4DF]">
+      <div className="flex overflow-x-auto border-b border-[#E8E4DF] -mx-4 px-4 sm:mx-0 sm:px-0">
         {TABS.map(({ key, label }) => (
           <button
             key={key}
             onClick={() => setTab(key)}
-            className={`px-4 py-3 text-xs tracking-widest uppercase transition-colors -mb-px ${
+            className={`whitespace-nowrap px-4 py-3 text-xs tracking-widest uppercase transition-colors -mb-px flex-shrink-0 ${
               tab === key
                 ? "border-b-2 border-[#C4A882] text-[#1A1A18]"
                 : "text-[#6B6860] hover:text-[#1A1A18]"

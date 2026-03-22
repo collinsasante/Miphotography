@@ -45,7 +45,7 @@ export function Navbar() {
           : "bg-[#FAFAF9]/95 backdrop-blur-sm border-b border-[#E8E4DF]"
       )}
     >
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-36 flex items-center justify-between">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 sm:h-28 md:h-36 flex items-center justify-between">
 
         {/* Logo */}
         <Link href="/" className="flex items-center h-10">
@@ -55,7 +55,7 @@ export function Navbar() {
             width={500}
             height={120}
             className={cn(
-              "object-contain h-32 w-auto transition-all duration-300",
+              "object-contain h-14 sm:h-20 md:h-32 w-auto transition-all duration-300",
               transparent ? "" : "invert"
             )}
             priority

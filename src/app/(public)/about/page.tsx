@@ -11,7 +11,7 @@ export default function AboutPage() {
     <div className="pt-24 pb-16">
       {/* Hero */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Image */}
           <div className="relative aspect-[3/4] bg-[#E8E4DF]">
             {/* Replace src with your actual photo */}
@@ -38,7 +38,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-[#E8E4DF] pt-10">
+            <div className="mt-10 grid grid-cols-3 gap-4 border-t border-[#E8E4DF] pt-10">
               {[
                 { num: "8+", label: "Years experience" },
                 { num: "300+", label: "Sessions completed" },
@@ -64,7 +64,7 @@ export default function AboutPage() {
       </div>
 
       {/* Philosophy */}
-      <section className="bg-[#1A1A18] py-20 px-4 text-center my-16">
+      <section className="bg-[#1A1A18] py-12 sm:py-20 px-4 text-center my-10 sm:my-16">
         <div className="max-w-2xl mx-auto">
           <p className="font-serif text-2xl sm:text-3xl text-white italic leading-relaxed">
             &ldquo;I don&apos;t capture moments. I capture the feeling between them.&rdquo;

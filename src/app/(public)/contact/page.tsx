@@ -35,7 +35,7 @@ export default function ContactPage() {
   return (
     <div className="pt-24 pb-16">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
           {/* Left */}
           <div>
             <p className="text-[10px] tracking-widest uppercase text-[#C4A882] mb-3">Get In Touch</p>
@@ -46,7 +46,7 @@ export default function ContactPage() {
 
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 border border-[#E8E4DF] flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 border border-[#E8E4DF] flex items-center justify-center flex-shrink-0">
                   <Mail size={14} className="text-[#C4A882]" />
                 </div>
                 <div>
@@ -57,7 +57,7 @@ export default function ContactPage() {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 border border-[#E8E4DF] flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 border border-[#E8E4DF] flex items-center justify-center flex-shrink-0">
                   <MapPin size={14} className="text-[#C4A882]" />
                 </div>
                 <div>
@@ -66,7 +66,7 @@ export default function ContactPage() {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 border border-[#E8E4DF] flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 border border-[#E8E4DF] flex items-center justify-center flex-shrink-0">
                   <Clock size={14} className="text-[#C4A882]" />
                 </div>
                 <div>
@@ -101,7 +101,7 @@ export default function ContactPage() {
                   </select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className={labelClass}>Name *</label>
                     <input {...form.register("name")} placeholder="Jane Smith" className={inputClass} />

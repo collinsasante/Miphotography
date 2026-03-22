@@ -7,7 +7,6 @@ import { Lightbox, type LightboxImage } from "@/components/gallery/Lightbox";
 import { FavoriteButton } from "@/components/gallery/FavoriteButton";
 import { BulkDownloadButton } from "@/components/gallery/BulkDownloadButton";
 import type { AirtableClientGallery } from "@/lib/airtable";
-import { Heart } from "lucide-react";
 
 interface DisplayImage {
   id: string;
@@ -126,8 +125,8 @@ export function ClientGalleryView({ gallery, images, bankDetails }: Props) {
               />
             </button>
 
-            {/* Favorite overlay */}
-            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            {/* Favorite button — always visible on touch, hover-reveal on desktop */}
+            <div className={`absolute top-2 right-2 transition-opacity ${favorites.has(img.id) ? "opacity-100" : "opacity-100 sm:opacity-0 sm:group-hover:opacity-100"}`}>
               <FavoriteButton
                 imageId={img.id}
                 galleryId={gallery.id}
@@ -135,15 +134,6 @@ export function ClientGalleryView({ gallery, images, bankDetails }: Props) {
                 onToggle={(fav) => handleToggle(img.id, fav)}
               />
             </div>
-
-            {/* Favorited indicator when not hovering */}
-            {favorites.has(img.id) && (
-              <div className="absolute top-2 right-2 group-hover:opacity-0 transition-opacity">
-                <div className="p-2 bg-white/80 rounded-full">
-                  <Heart size={14} className="fill-red-500 text-red-500" />
-                </div>
-              </div>
-            )}
           </div>
         ))}
       </div>
