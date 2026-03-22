@@ -1,20 +1,21 @@
-import Airtable from "airtable";
+/**
+ * Airtable REST API client.
+ * Uses native fetch — fully compatible with Cloudflare Workers.
+ * No Airtable SDK dependency.
+ */
 
-// Lazy initialization — avoids crash when env vars aren't set at build time
-let _base: ReturnType<InstanceType<typeof Airtable>["base"]> | null = null;
+const BASE_URL = "https://api.airtable.com/v0";
 
-function getBase() {
-  if (!_base) {
-    const key = process.env.AIRTABLE_API_KEY;
-    if (!key) {
-      // Build-time: return null so callers can return empty data gracefully
-      return null;
-    }
-    _base = new Airtable({ apiKey: key }).base(process.env.AIRTABLE_BASE_ID!);
-  }
-  return _base;
+function getCredentials() {
+  const key    = process.env.AIRTABLE_API_KEY;
+  const baseId = process.env.AIRTABLE_BASE_ID;
+  if (!key || !baseId) return null;
+  return { key, baseId };
 }
 
+function headers(key: string) {
+  return { Authorization: `Bearer ${key}`, "Content-Type": "application/json" };
+}
 
 // ─── Table names ─────────────────────────────────────────
 export const Tables = {
@@ -110,7 +111,7 @@ export interface AirtablePortfolioImage {
 
 export interface AirtableClientGallery {
   id: string;
-  userId: string[];  // linked to Users
+  userId: string[];
   title: string;
   slug: string;
   description?: string;
@@ -172,78 +173,117 @@ export interface AirtableSettings {
   bookingIntro?: string;
 }
 
-// ─── Generic helpers ──────────────────────────────────────
+// ─── REST helpers ─────────────────────────────────────────
 
 type RecordFields = Record<string, unknown>;
 
+interface AirtableRecord {
+  id: string;
+  fields: RecordFields;
+}
+
+interface AirtableListResponse {
+  records: AirtableRecord[];
+  offset?: string;
+}
+
+function mapRecord<T>(r: AirtableRecord): T {
+  return { id: r.id, ...r.fields } as unknown as T;
+}
+
 export async function findAll<T>(
   tableName: string,
-  opts: { filterFormula?: string; sort?: { field: string; direction?: "asc" | "desc" }[]; maxRecords?: number } = {}
+  opts: {
+    filterFormula?: string;
+    sort?: { field: string; direction?: "asc" | "desc" }[];
+    maxRecords?: number;
+  } = {}
 ): Promise<T[]> {
-  const b = getBase();
-  if (!b) return []; // build-time fallback: no credentials
+  const creds = getCredentials();
+  if (!creds) return [];
 
-  const records = await b(tableName)
-    .select({
-      filterByFormula: opts.filterFormula ?? "",
-      sort: opts.sort ?? [],
-      ...(opts.maxRecords !== undefined && { maxRecords: opts.maxRecords }),
-    })
-    .all();
+  const params = new URLSearchParams();
+  if (opts.filterFormula) params.set("filterByFormula", opts.filterFormula);
+  if (opts.maxRecords)   params.set("maxRecords", String(opts.maxRecords));
+  opts.sort?.forEach((s, i) => {
+    params.set(`sort[${i}][field]`, s.field);
+    if (s.direction) params.set(`sort[${i}][direction]`, s.direction);
+  });
 
-  return records.map((r) => ({ id: r.id, ...r.fields } as unknown as T));
+  const all: T[] = [];
+  let offset: string | undefined;
+
+  do {
+    if (offset) params.set("offset", offset);
+    const url = `${BASE_URL}/${creds.baseId}/${encodeURIComponent(tableName)}?${params}`;
+    const res = await fetch(url, { headers: headers(creds.key) });
+    if (!res.ok) return all;
+    const data = await res.json() as AirtableListResponse;
+    all.push(...data.records.map(mapRecord<T>));
+    offset = data.offset;
+  } while (offset);
+
+  return all;
 }
 
 export async function findById<T>(tableName: string, id: string): Promise<T | null> {
-  const b = getBase();
-  if (!b) return null;
+  const creds = getCredentials();
+  if (!creds) return null;
   try {
-    const record = await b(tableName).find(id);
-    return { id: record.id, ...record.fields } as unknown as T;
+    const url = `${BASE_URL}/${creds.baseId}/${encodeURIComponent(tableName)}/${id}`;
+    const res = await fetch(url, { headers: headers(creds.key) });
+    if (!res.ok) return null;
+    const record = await res.json() as AirtableRecord;
+    return mapRecord<T>(record);
   } catch {
     return null;
   }
 }
 
-export async function findOne<T>(
-  tableName: string,
-  filterFormula: string
-): Promise<T | null> {
-  const b = getBase();
-  if (!b) return null;
-  const records = await b(tableName)
-    .select({ filterByFormula: filterFormula, maxRecords: 1 })
-    .firstPage();
-  if (!records.length) return null;
-  return { id: records[0].id, ...records[0].fields } as unknown as T;
+export async function findOne<T>(tableName: string, filterFormula: string): Promise<T | null> {
+  const creds = getCredentials();
+  if (!creds) return null;
+  const params = new URLSearchParams({ filterByFormula: filterFormula, maxRecords: "1" });
+  const url = `${BASE_URL}/${creds.baseId}/${encodeURIComponent(tableName)}?${params}`;
+  const res = await fetch(url, { headers: headers(creds.key) });
+  if (!res.ok) return null;
+  const data = await res.json() as AirtableListResponse;
+  if (!data.records.length) return null;
+  return mapRecord<T>(data.records[0]);
 }
 
-export async function create<T>(
-  tableName: string,
-  fields: RecordFields
-): Promise<T> {
-  const b = getBase();
-  if (!b) throw new Error("AIRTABLE_API_KEY is not set");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const record = await (b(tableName) as any).create(fields);
-  return { id: record.id, ...record.fields } as unknown as T;
+export async function create<T>(tableName: string, fields: RecordFields): Promise<T> {
+  const creds = getCredentials();
+  if (!creds) throw new Error("AIRTABLE_API_KEY is not set");
+  const url = `${BASE_URL}/${creds.baseId}/${encodeURIComponent(tableName)}`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: headers(creds.key),
+    body: JSON.stringify({ fields }),
+  });
+  if (!res.ok) throw new Error(`Airtable create failed: ${res.status}`);
+  const record = await res.json() as AirtableRecord;
+  return mapRecord<T>(record);
 }
 
-export async function update<T>(
-  tableName: string,
-  id: string,
-  fields: RecordFields
-): Promise<T> {
-  const b = getBase();
-  if (!b) throw new Error("AIRTABLE_API_KEY is not set");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const record = await (b(tableName) as any).update(id, fields);
-  return { id: record.id, ...record.fields } as unknown as T;
+export async function update<T>(tableName: string, id: string, fields: RecordFields): Promise<T> {
+  const creds = getCredentials();
+  if (!creds) throw new Error("AIRTABLE_API_KEY is not set");
+  const url = `${BASE_URL}/${creds.baseId}/${encodeURIComponent(tableName)}/${id}`;
+  const res = await fetch(url, {
+    method: "PATCH",
+    headers: headers(creds.key),
+    body: JSON.stringify({ fields }),
+  });
+  if (!res.ok) throw new Error(`Airtable update failed: ${res.status}`);
+  const record = await res.json() as AirtableRecord;
+  return mapRecord<T>(record);
 }
 
 export async function destroy(tableName: string, id: string): Promise<void> {
-  const b = getBase();
-  if (!b) throw new Error("AIRTABLE_API_KEY is not set");
-  await b(tableName).destroy(id);
+  const creds = getCredentials();
+  if (!creds) throw new Error("AIRTABLE_API_KEY is not set");
+  const url = `${BASE_URL}/${creds.baseId}/${encodeURIComponent(tableName)}/${id}`;
+  const res = await fetch(url, { method: "DELETE", headers: headers(creds.key) });
+  if (!res.ok) throw new Error(`Airtable delete failed: ${res.status}`);
 }
-
