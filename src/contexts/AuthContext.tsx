@@ -27,7 +27,7 @@ interface AuthContextValue {
   sessionUser: SessionUser | null;
   loading: boolean;
   sessionVerified: boolean;
-  signInWithGoogle: () => Promise<void>;
+  signInWithGoogle: () => Promise<SessionUser | null>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   sendMagicLink: (email: string) => Promise<void>;
   finishMagicLinkSignIn: (email: string) => Promise<void>;
@@ -110,9 +110,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return unsubscribe;
   }, [syncSession]);
 
-  const signInWithGoogle = async () => {
-    await signInWithPopup(auth, googleProvider);
-    // onAuthStateChanged handles the rest
+  const signInWithGoogle = async (): Promise<SessionUser | null> => {
+    const result = await signInWithPopup(auth, googleProvider);
+    // Sync session immediately so callers can redirect without waiting for onAuthStateChanged
+    return syncSession(result.user);
   };
 
   const signInWithEmail = async (email: string, password: string) => {

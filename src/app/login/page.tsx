@@ -3,7 +3,6 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import Image from "next/image";
 import { Chrome } from "lucide-react";
 
 type View = "signin" | "register" | "register-sent" | "forgot" | "forgot-sent" | "finishing";
@@ -50,8 +49,16 @@ function LoginForm() {
 
   const handleGoogle = async () => {
     setError(null);
+    setIsSubmitting(true);
     try {
-      await signInWithGoogle();
+      const session = await signInWithGoogle();
+      if (session) {
+        if (explicitNext && explicitNext.startsWith("/")) {
+          router.replace(explicitNext);
+        } else {
+          router.replace(session.role === "admin" ? "/admin" : "/client");
+        }
+      }
     } catch (err: unknown) {
       const code = (err as { code?: string }).code;
       if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request") return;
@@ -60,6 +67,8 @@ function LoginForm() {
       } else {
         setError("Google sign-in failed. Please try again.");
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -134,9 +143,7 @@ function LoginForm() {
 
         {/* Logo */}
         <div className="text-center mb-10">
-          <div className="flex items-center justify-center mb-3">
-            <Image src="/logo.png" alt="Miphotographer" width={160} height={40} className="object-contain h-9 w-auto" />
-          </div>
+          <p className="font-serif text-2xl text-[#1A1A18] mb-1">Miphotographer</p>
           <p className="text-[10px] tracking-widest uppercase text-[#6B6860]">Client Portal</p>
         </div>
 
@@ -225,15 +232,15 @@ function LoginForm() {
                   <span className="text-[10px] tracking-widest uppercase text-[#6B6860]">or</span>
                   <div className="h-px flex-1 bg-[#E8E4DF]" />
                 </div>
-                <button onClick={handleGoogle} className="w-full flex items-center justify-center gap-3 py-3.5 border border-[#E8E4DF] text-sm text-[#1A1A18] hover:border-[#1A1A18] transition-colors">
-                  <Chrome size={16} /> Continue with Google
+                <button onClick={handleGoogle} disabled={isSubmitting} className="w-full flex items-center justify-center gap-3 py-3.5 border border-[#E8E4DF] text-sm text-[#1A1A18] hover:border-[#1A1A18] transition-colors disabled:opacity-60">
+                  <Chrome size={16} /> {isSubmitting ? "Signing in…" : "Continue with Google"}
                 </button>
               </>
             ) : (
               /* ── Sign in ── */
               <>
-                <button onClick={handleGoogle} className="w-full flex items-center justify-center gap-3 py-3.5 border border-[#E8E4DF] text-sm text-[#1A1A18] hover:border-[#1A1A18] transition-colors">
-                  <Chrome size={16} /> Continue with Google
+                <button onClick={handleGoogle} disabled={isSubmitting} className="w-full flex items-center justify-center gap-3 py-3.5 border border-[#E8E4DF] text-sm text-[#1A1A18] hover:border-[#1A1A18] transition-colors disabled:opacity-60">
+                  <Chrome size={16} /> {isSubmitting ? "Signing in…" : "Continue with Google"}
                 </button>
 
                 <div className="flex items-center gap-4 my-6">

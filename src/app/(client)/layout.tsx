@@ -33,7 +33,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 font-serif text-[#1A1A18]">
             <Camera size={16} className="text-[#C4A882]" />
-            Kofi
+            Miphotographer
           </Link>
           <div className="flex items-center gap-4">
             <span className="text-sm text-[#6B6860]">{sessionUser.name ?? sessionUser.email}</span>
