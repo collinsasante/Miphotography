@@ -18,7 +18,7 @@ import { ArrowRight } from "lucide-react";
 export const metadata: Metadata = {
   title: "Miphotographer | Professional Photography",
   description:
-    "Premium photography services — weddings, portraits, and commercial. Book your session today.",
+    "Premium photography services: weddings, portraits, and commercial. Book your session today.",
 };
 
 // Hero background photo

@@ -98,7 +98,7 @@ export const PHOTO_ONLY_PACKAGES: StaticPackage[] = [
     category: "photo-only",
     price: 1000000,
     duration: 480,
-    description: "Full premium photo coverage — nothing left uncaptured.",
+    description: "Full premium photo coverage.",
     includes: "Full premium photo coverage\nEdited high-resolution images\nOnline delivery",
     isActive: true,
     sortOrder: 7,
@@ -139,7 +139,7 @@ export const PHOTO_VIDEO_PACKAGES: StaticPackage[] = [
     category: "photo-video",
     price: 1100000,
     duration: 600,
-    description: "Full photo and video coverage — every moment, every emotion.",
+    description: "Full photo and video coverage.",
     includes: "Edited photos\nCinematic highlight video\nOnline delivery",
     isActive: true,
     sortOrder: 10,
@@ -151,7 +151,7 @@ export const PHOTO_VIDEO_PACKAGES: StaticPackage[] = [
     category: "photo-video",
     price: 1500000,
     duration: 720,
-    description: "Our most complete package — premium photo and video, full delivery.",
+    description: "Our most complete package, full delivery package.",
     includes: "Edited photos\nCinematic highlight video\nFull delivery package",
     isActive: true,
     sortOrder: 11,
@@ -171,8 +171,8 @@ export const EXTRAS: ExtraItem[] = [
   { id: "extra-photographer", name: "Extra Photographer", price: 120000 },
   { id: "prewedding-2looks", name: "Pre-wedding / Post-wedding Shoot (2 looks, photos only)", price: 150000 },
   { id: "prewedding-3looks", name: "Pre-wedding / Post-wedding Shoot (3 looks, photos only)", price: 250000 },
-  { id: "drone-1day", name: "Drone Coverage — 1 day", price: 100000 },
-  { id: "drone-2days", name: "Drone Coverage — 2 days", price: 180000 },
+  { id: "drone-1day", name: "Drone Coverage, 1 day", price: 100000 },
+  { id: "drone-2days", name: "Drone Coverage, 2 days", price: 180000 },
 ];
 
 // ─── Canvas Backdrops ─────────────────────────────────────────────────────────

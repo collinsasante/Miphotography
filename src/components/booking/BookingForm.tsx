@@ -173,7 +173,7 @@ export function BookingForm({ packages, preselectedPackageId, blockedDates = [] 
           <div>
             <p className="text-[10px] tracking-widest uppercase text-[#6B6860] mb-1">Step 2 of 3</p>
             <h2 className="font-serif text-2xl">Choose a date</h2>
-            <p className="text-[#6B6860] text-sm mt-2">Select a preferred date — I&apos;ll confirm availability within 24 hours.</p>
+            <p className="text-[#6B6860] text-sm mt-2">Select a preferred date. I&apos;ll confirm availability within 24 hours.</p>
           </div>
           <div className="w-full max-w-sm mx-auto">
             <DayPicker

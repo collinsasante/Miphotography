@@ -41,7 +41,7 @@ export default function ContactPage() {
             <p className="text-[10px] tracking-widest uppercase text-[#C4A882] mb-3">Get In Touch</p>
             <h1 className="font-serif text-4xl text-[#1A1A18] mb-6">Let&apos;s Talk</h1>
             <p className="text-[#6B6860] leading-relaxed mb-12">
-              Whether you have a question about packages, availability, or just want to say hello — I&apos;d love to hear from you.
+              Whether you have a question about packages, availability, or just want to say hello. I&apos;d love to hear from you.
             </p>
 
             <div className="space-y-6">

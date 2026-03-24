@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s | Miphotographer",
   },
   description:
-    "Premium photography services — weddings, portraits, and commercial. Book your session today.",
+    "Premium photography services: weddings, portraits, and commercial. Book your session today.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   openGraph: {
     type: "website",

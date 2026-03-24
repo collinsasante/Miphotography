@@ -82,7 +82,7 @@ export default async function AdminBookingsPage({ searchParams }: Props) {
                 <p className="text-sm font-medium text-[#1A1A18] group-hover:text-[#C4A882] transition-colors">{booking.name}</p>
                 <p className="text-xs text-[#6B6860]">{booking.email}</p>
               </div>
-              <div className="flex items-center text-sm text-[#6B6860]">{booking.packageName ?? "—"}</div>
+              <div className="flex items-center text-sm text-[#6B6860]">{booking.packageName ?? "-"}</div>
               <div className="flex items-center text-sm text-[#6B6860]">
                 {booking.sessionDate ? format(new Date(booking.sessionDate), "MMM d, yyyy") : "—"}
               </div>

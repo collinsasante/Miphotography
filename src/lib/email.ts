@@ -37,7 +37,7 @@ export function bookingConfirmationEmail(data: {
 }) {
   return {
     to: "", // caller sets this
-    subject: "Booking Request Received — We'll Be In Touch",
+    subject: "Booking Request Received",
     html: `
       <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;padding:40px 20px;color:#1A1A18;">
         <h1 style="font-size:28px;font-weight:normal;margin-bottom:24px;">Thank you, ${data.name}.</h1>
@@ -103,7 +103,7 @@ export function galleryReadyEmail(data: {
 }) {
   return {
     to: "", // caller sets this
-    subject: `Your Gallery is Ready — ${data.galleryTitle}`,
+    subject: `Your Gallery is Ready: ${data.galleryTitle}`,
     html: `
       <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;padding:40px 20px;color:#1A1A18;">
         <h1 style="font-size:28px;font-weight:normal;margin-bottom:24px;">Your gallery is ready, ${data.clientName}.</h1>
@@ -149,7 +149,7 @@ export function inviteEmail(data: {
   photographerName: string;
 }) {
   return {
-    subject: `You're invited to view your gallery — ${data.photographerName}`,
+    subject: `You're invited to view your gallery: ${data.photographerName}`,
     html: `
       <div style="font-family:Georgia,serif;max-width:600px;margin:0 auto;padding:40px 20px;color:#1A1A18;background:#FAFAF9;">
         <h1 style="font-size:28px;font-weight:normal;margin-bottom:8px;">Hello, ${data.name}.</h1>
