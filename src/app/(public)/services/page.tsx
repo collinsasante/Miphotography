@@ -26,7 +26,7 @@ const FAQS = [
 
 export default function ServicesPage() {
   return (
-    <div className="pt-24 pb-16">
+    <div className="pt-24 sm:pt-36 md:pt-44 pb-16">
       {/* Header */}
       <div className="text-center py-16 px-4">
         <p className="text-[10px] tracking-widest uppercase text-[#C4A882] mb-3">Pricing</p>

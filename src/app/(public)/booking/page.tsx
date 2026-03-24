@@ -17,7 +17,7 @@ export default async function BookingPage({ searchParams }: Props) {
   const packages = ALL_BOOKABLE_PACKAGES;
 
   return (
-    <div className="pt-24 min-h-screen">
+    <div className="pt-24 sm:pt-36 md:pt-44 min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-16">
           <p className="text-[10px] tracking-widest uppercase text-[#C4A882] mb-3">Get Started</p>

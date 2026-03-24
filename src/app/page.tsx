@@ -8,18 +8,12 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/marketing/Hero";
-import { GalleryCard } from "@/components/marketing/GalleryCard";
 import { PackageCard } from "@/components/marketing/PackageCard";
-import { findAll, Tables } from "@/lib/airtable";
-import type {
-  AirtablePortfolioGallery,
-  AirtablePackage,
-  AirtableTestimonial,
-} from "@/lib/airtable";
+import { PhotoCard } from "@/components/marketing/PhotoCard";
 import { getImageUrl } from "@/lib/cloudinary";
-import { Star, ArrowRight } from "lucide-react";
-
-export const revalidate = 3600;
+import { PORTFOLIO_PHOTOS } from "@/lib/data/portfolio";
+import { ALL_BOOKABLE_PACKAGES } from "@/lib/data/packages";
+import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Miphotography | Professional Photography",
@@ -27,32 +21,14 @@ export const metadata: Metadata = {
     "Premium photography services — weddings, portraits, and commercial. Book your session today.",
 };
 
-async function getData() {
-  const [galleries, packages, testimonials] = await Promise.all([
-    findAll<AirtablePortfolioGallery>(Tables.PortfolioGalleries, {
-      filterFormula: "{isPublished} = 1",
-      sort: [{ field: "sortOrder", direction: "asc" }],
-      maxRecords: 6,
-    }),
-    findAll<AirtablePackage>(Tables.Packages, {
-      filterFormula: "{isActive} = 1",
-      sort: [{ field: "sortOrder", direction: "asc" }],
-    }),
-    findAll<AirtableTestimonial>(Tables.Testimonials, {
-      filterFormula: "{isPublished} = 1",
-      sort: [{ field: "sortOrder", direction: "asc" }],
-      maxRecords: 3,
-    }),
-  ]);
-  return { galleries, packages, testimonials };
-}
+// Use one of the portfolio photos as the hero background
+const HERO_PUBLIC_ID = "miphotography/portfolio/IMG_9112";
 
-export default async function HomePage() {
-  const { galleries, packages, testimonials } = await getData();
-  const heroGallery = galleries[0];
-  const heroImageUrl = heroGallery
-    ? getImageUrl(heroGallery.coverPublicId, { width: 1920, quality: 80 })
-    : undefined;
+// Show 12 photos in the homepage preview grid
+const PREVIEW_PHOTOS = PORTFOLIO_PHOTOS.slice(0, 12);
+
+export default function HomePage() {
+  const heroImageUrl = getImageUrl(HERO_PUBLIC_ID, { width: 1920, quality: 80 });
 
   return (
     <>
@@ -60,7 +36,7 @@ export default async function HomePage() {
 
       <main>
         {/* Hero */}
-        <Hero imageUrl={heroImageUrl} imageAlt="Photography hero" />
+        <Hero imageUrl={heroImageUrl} imageAlt="Miphotography wedding photography" />
 
         {/* Portfolio preview */}
         <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -81,27 +57,18 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {galleries.map((g, i) => (
-              <GalleryCard
-                key={g.id}
-                title={g.title}
-                slug={g.slug}
-                category={g.category}
-                coverImageUrl={getImageUrl(g.coverPublicId, { width: 800 })}
-                coverPublicId={g.coverPublicId}
-                location={g.location}
-                index={i}
-              />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+            {PREVIEW_PHOTOS.map((photo, i) => (
+              <PhotoCard key={photo.publicId} publicId={photo.publicId} index={i} />
             ))}
           </div>
 
-          <div className="mt-10 text-center sm:hidden">
+          <div className="mt-8 text-center">
             <Link
               href="/portfolio"
-              className="text-xs tracking-widest uppercase text-[#6B6860] hover:text-[#C4A882] transition-colors"
+              className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-[#6B6860] hover:text-[#C4A882] transition-colors"
             >
-              View all galleries →
+              View all galleries <ArrowRight size={12} />
             </Link>
           </div>
         </section>
@@ -125,59 +92,25 @@ export default async function HomePage() {
               via your private gallery.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {packages.map((pkg, i) => (
-              <PackageCard key={pkg.id} pkg={pkg} featured={i === 1} index={i} />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {ALL_BOOKABLE_PACKAGES.map((pkg, i) => (
+              <PackageCard key={pkg.id} pkg={pkg} featured={pkg.id === "awareso"} index={i} />
             ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-[#6B6860] hover:text-[#C4A882] transition-colors"
+            >
+              View extras & backdrops <ArrowRight size={12} />
+            </Link>
           </div>
         </section>
 
-        {/* Testimonials */}
-        {testimonials.length > 0 && (
-          <section className="bg-[#1A1A18] py-24 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-5xl mx-auto">
-              <div className="text-center mb-16">
-                <p className="text-[10px] tracking-widest uppercase text-[#C4A882] mb-3">
-                  Reviews
-                </p>
-                <h2 className="font-serif text-3xl text-white">
-                  What Clients Say
-                </h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {testimonials.map((t) => (
-                  <div key={t.id} className="flex flex-col">
-                    <div className="flex gap-0.5 mb-4">
-                      {Array.from({ length: t.rating }).map((_, i) => (
-                        <Star
-                          key={i}
-                          size={12}
-                          className="fill-[#C4A882] text-[#C4A882]"
-                        />
-                      ))}
-                    </div>
-                    <p className="text-white/70 text-sm leading-relaxed flex-1 italic">
-                      &ldquo;{t.body}&rdquo;
-                    </p>
-                    <div className="mt-6 pt-6 border-t border-white/10">
-                      <p className="text-white text-sm font-medium">
-                        {t.clientName}
-                      </p>
-                      {t.clientTitle && (
-                        <p className="text-[#6B6860] text-xs mt-0.5">
-                          {t.clientTitle}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* CTA */}
-        <section className="py-24 px-4 text-center">
+        <section className="py-24 px-4 text-center bg-[#F9F7F5]">
           <p className="text-[10px] tracking-widest uppercase text-[#C4A882] mb-4">
             Ready?
           </p>
@@ -185,7 +118,7 @@ export default async function HomePage() {
             Let&apos;s Create Something Beautiful
           </h2>
           <p className="text-[#6B6860] max-w-sm mx-auto mb-10 text-sm leading-relaxed">
-            I&apos;d love to tell your story. Reach out to start the
+            We&apos;d love to tell your story. Reach out to start the
             conversation.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

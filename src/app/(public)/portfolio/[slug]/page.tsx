@@ -61,7 +61,7 @@ export default async function PortfolioGalleryPage({ params }: Props) {
   }));
 
   return (
-    <div className="pt-24 pb-16">
+    <div className="pt-24 sm:pt-36 md:pt-44 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12">
