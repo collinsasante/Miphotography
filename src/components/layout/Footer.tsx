@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Instagram, Mail } from "lucide-react";
+import { Instagram, Mail, Phone } from "lucide-react";
 
 export function Footer() {
   return (
@@ -32,11 +32,18 @@ export function Footer() {
                 <Instagram size={18} />
               </a>
               <a
-                href="mailto:hello@yourdomain.com"
+                href="mailto:Kissirichsmanuel3@gmail.com"
                 aria-label="Email"
                 className="hover:text-[#C4A882] transition-colors"
               >
                 <Mail size={18} />
+              </a>
+              <a
+                href="tel:+233538523381"
+                aria-label="Phone"
+                className="hover:text-[#C4A882] transition-colors"
+              >
+                <Phone size={18} />
               </a>
             </div>
           </div>
@@ -61,12 +68,24 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Client */}
+          {/* Contact */}
           <div>
-            <h3 className="text-xs tracking-widest uppercase text-white mb-4">Client Portal</h3>
+            <h3 className="text-xs tracking-widest uppercase text-white mb-4">Contact</h3>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/login"  className="hover:text-[#C4A882] transition-colors">Client Login</Link></li>
-              <li><Link href="/client" className="hover:text-[#C4A882] transition-colors">My Galleries</Link></li>
+              <li>
+                <a href="mailto:Kissirichsmanuel3@gmail.com" className="hover:text-[#C4A882] transition-colors break-all">
+                  Kissirichsmanuel3@gmail.com
+                </a>
+              </li>
+              <li>
+                <a href="tel:+233538523381" className="hover:text-[#C4A882] transition-colors">0538523381</a>
+              </li>
+              <li>
+                <a href="tel:+233205859006" className="hover:text-[#C4A882] transition-colors">0205859006</a>
+              </li>
+              <li className="pt-2 border-t border-white/10">
+                <Link href="/login" className="hover:text-[#C4A882] transition-colors">Client Login</Link>
+              </li>
             </ul>
           </div>
         </div>

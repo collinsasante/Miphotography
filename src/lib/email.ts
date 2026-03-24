@@ -46,7 +46,19 @@ export function bookingConfirmationEmail(data: {
         </p>
         ${data.packageName ? `<p style="color:#6B6860;line-height:1.7;margin-bottom:8px;"><strong>Package:</strong> ${data.packageName}</p>` : ""}
         ${data.sessionDate ? `<p style="color:#6B6860;line-height:1.7;margin-bottom:16px;"><strong>Requested date:</strong> ${data.sessionDate}</p>` : ""}
-        <p style="color:#6B6860;font-size:12px;margin-top:48px;">Booking ID: ${data.bookingId}</p>
+        <div style="margin-top:32px;padding:24px;background:#F9F7F5;border-left:3px solid #C4A882;">
+          <p style="font-size:13px;font-weight:bold;color:#1A1A18;margin:0 0 12px;">Payment Details</p>
+          <p style="color:#6B6860;font-size:13px;line-height:1.7;margin:0 0 8px;">
+            A 50% retainer is required to confirm your booking. Please use any of the following:
+          </p>
+          <table style="border-collapse:collapse;font-size:13px;color:#1A1A18;">
+            <tr><td style="padding:4px 16px 4px 0;color:#6B6860;">CalBank</td><td style="padding:4px 0;font-weight:500;">1400008198359</td></tr>
+            <tr><td style="padding:4px 16px 4px 0;color:#6B6860;">MTN Mobile Money</td><td style="padding:4px 0;font-weight:500;">0538523381</td></tr>
+            <tr><td style="padding:4px 16px 4px 0;color:#6B6860;">Vodafone Cash</td><td style="padding:4px 0;font-weight:500;">0205859006</td></tr>
+            <tr><td style="padding:4px 16px 4px 0;color:#6B6860;">Account Name</td><td style="padding:4px 0;font-weight:500;">Emmanuel Kissiedu</td></tr>
+          </table>
+        </div>
+        <p style="color:#6B6860;font-size:12px;margin-top:32px;">Booking ID: ${data.bookingId}</p>
         <hr style="border:none;border-top:1px solid #E8E4DF;margin:32px 0;" />
         <p style="color:#C4A882;font-size:13px;">${ADMIN_NAME} Photography</p>
       </div>

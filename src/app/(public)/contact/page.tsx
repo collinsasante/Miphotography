@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { inquirySchema, type InquiryInput } from "@/lib/validations/inquiry";
-import { Mail, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, Clock } from "lucide-react";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -51,18 +51,23 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-xs tracking-widest uppercase text-[#6B6860] mb-1">Email</p>
-                  <a href="mailto:hello@yourdomain.com" className="text-sm text-[#1A1A18] hover:text-[#C4A882] transition-colors">
-                    hello@yourdomain.com
+                  <a href="mailto:Kissirichsmanuel3@gmail.com" className="text-sm text-[#1A1A18] hover:text-[#C4A882] transition-colors">
+                    Kissirichsmanuel3@gmail.com
                   </a>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 border border-[#E8E4DF] flex items-center justify-center flex-shrink-0">
-                  <MapPin size={14} className="text-[#C4A882]" />
+                  <Phone size={14} className="text-[#C4A882]" />
                 </div>
                 <div>
-                  <p className="text-xs tracking-widest uppercase text-[#6B6860] mb-1">Location</p>
-                  <p className="text-sm text-[#1A1A18]">Based in [Your City]<br />Available for travel worldwide</p>
+                  <p className="text-xs tracking-widest uppercase text-[#6B6860] mb-1">Phone</p>
+                  <a href="tel:+233538523381" className="text-sm text-[#1A1A18] hover:text-[#C4A882] transition-colors block">
+                    0538523381
+                  </a>
+                  <a href="tel:+233205859006" className="text-sm text-[#1A1A18] hover:text-[#C4A882] transition-colors block">
+                    0205859006
+                  </a>
                 </div>
               </div>
               <div className="flex items-start gap-4">

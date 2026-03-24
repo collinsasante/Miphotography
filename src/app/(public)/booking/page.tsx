@@ -1,11 +1,10 @@
 import { Metadata } from "next";
-import { findAll, Tables } from "@/lib/airtable";
-import type { AirtablePackage } from "@/lib/airtable";
 import { BookingForm } from "@/components/booking/BookingForm";
+import { ALL_BOOKABLE_PACKAGES } from "@/lib/data/packages";
 
 export const metadata: Metadata = {
   title: "Book a Session",
-  description: "Reserve your photography session. Fill out the form and I'll be in touch within 24 hours.",
+  description: "Reserve your photography session. Fill out the form and we'll be in touch within 24 hours.",
 };
 
 interface Props {
@@ -15,10 +14,7 @@ interface Props {
 export default async function BookingPage({ searchParams }: Props) {
   const { package: packageId } = await searchParams;
 
-  const packages = await findAll<AirtablePackage>(Tables.Packages, {
-    filterFormula: "{isActive} = 1",
-    sort: [{ field: "sortOrder", direction: "asc" }],
-  });
+  const packages = ALL_BOOKABLE_PACKAGES;
 
   return (
     <div className="pt-24 min-h-screen">
