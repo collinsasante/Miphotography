@@ -22,7 +22,7 @@ export function Hero({ imageUrl, imageAlt = "Photography hero" }: HeroProps) {
             priority
             sizes="100vw"
             className="object-cover"
-            style={{ objectPosition: "center 10%" }}
+            style={{ objectPosition: "center 35%" }}
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-[#1A1A18] via-[#2C2C28] to-[#0F0F0E]" />

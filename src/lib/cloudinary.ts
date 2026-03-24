@@ -18,7 +18,7 @@ export function getImageUrl(
     format?: "auto" | "webp" | "avif" | "jpg";
     watermark?: boolean;
     crop?: "fill" | "fit" | "scale" | "thumb";
-    gravity?: "auto" | "face" | "center";
+    gravity?: "auto" | "face" | "center" | "north";
   } = {}
 ): string {
   const {
@@ -36,7 +36,9 @@ export function getImageUrl(
     const dims = [width ? `w_${width}` : "", height ? `h_${height}` : ""]
       .filter(Boolean)
       .join(",");
-    transforms.push(`${dims},c_${crop},g_${gravity}`);
+    // gravity only applies to cropping modes; fit/scale don't crop so skip it
+    const needsGravity = crop === "fill" || crop === "thumb";
+    transforms.push(`${dims},c_${crop}${needsGravity ? `,g_${gravity}` : ""}`);
   }
   transforms.push(`q_${quality}`, `f_${format}`);
   if (watermark) {

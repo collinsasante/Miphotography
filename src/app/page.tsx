@@ -9,7 +9,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/marketing/Hero";
 import { PackageCard } from "@/components/marketing/PackageCard";
-import { PhotoCard } from "@/components/marketing/PhotoCard";
+import { PhotoPreviewGrid } from "@/components/marketing/PhotoPreviewGrid";
 import { getImageUrl } from "@/lib/cloudinary";
 import { PORTFOLIO_PHOTOS } from "@/lib/data/portfolio";
 import { PHOTO_ONLY_PACKAGES, PHOTO_VIDEO_PACKAGES } from "@/lib/data/packages";
@@ -38,7 +38,7 @@ const FEATURED_PACKAGES = [
 const PREVIEW_PHOTOS = PORTFOLIO_PHOTOS.slice(0, 12);
 
 export default function HomePage() {
-  const heroImageUrl = getImageUrl(HERO_PUBLIC_ID, { width: 1920, quality: 80 });
+  const heroImageUrl = getImageUrl(HERO_PUBLIC_ID, { width: 1920, crop: "scale", quality: 80 });
 
   return (
     <>
@@ -67,11 +67,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
-            {PREVIEW_PHOTOS.map((photo, i) => (
-              <PhotoCard key={photo.publicId} publicId={photo.publicId} index={i} />
-            ))}
-          </div>
+          <PhotoPreviewGrid photos={PREVIEW_PHOTOS.map((p) => p.publicId)} />
 
           <div className="mt-8 text-center">
             <Link
