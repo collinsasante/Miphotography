@@ -12,7 +12,7 @@ export function Footer() {
             <Link href="/" className="flex items-center h-8 mb-4">
               <Image
                 src="/logo.png"
-                alt="Miphotography"
+                alt="Miphotographer"
                 width={140}
                 height={35}
                 className="object-contain h-28 w-auto"
@@ -91,7 +91,7 @@ export function Footer() {
         </div>
 
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <p>© {new Date().getFullYear()} Miphotography. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Miphotographer. All rights reserved.</p>
           <p className="text-[#C4A882]">Capturing moments that matter.</p>
         </div>
       </div>

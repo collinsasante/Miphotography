@@ -42,7 +42,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         <Link href="/" className="flex items-center justify-center" onClick={onNavigate}>
           <NextImage
             src="/logo.png"
-            alt="Miphotography"
+            alt="Miphotographer"
             width={160}
             height={48}
             className="object-contain h-12 w-auto"
@@ -101,7 +101,7 @@ export function AdminSidebar() {
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-[#1A1A18] flex items-center justify-between px-4 h-14 border-b border-white/10">
         <NextImage
           src="/logo.png"
-          alt="Miphotography"
+          alt="Miphotographer"
           width={100}
           height={30}
           className="object-contain h-8 w-auto"

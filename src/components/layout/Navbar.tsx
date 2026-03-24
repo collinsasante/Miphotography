@@ -51,7 +51,7 @@ export function Navbar() {
         <Link href="/" className="flex items-center h-10">
           <Image
             src="/logo.png"
-            alt="Miphotography"
+            alt="Miphotographer"
             width={500}
             height={120}
             className={cn(

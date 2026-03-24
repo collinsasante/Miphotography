@@ -12,17 +12,27 @@ import { PackageCard } from "@/components/marketing/PackageCard";
 import { PhotoCard } from "@/components/marketing/PhotoCard";
 import { getImageUrl } from "@/lib/cloudinary";
 import { PORTFOLIO_PHOTOS } from "@/lib/data/portfolio";
-import { ALL_BOOKABLE_PACKAGES } from "@/lib/data/packages";
+import { PHOTO_ONLY_PACKAGES, PHOTO_VIDEO_PACKAGES } from "@/lib/data/packages";
 import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Miphotography | Professional Photography",
+  title: "Miphotographer | Professional Photography",
   description:
     "Premium photography services — weddings, portraits, and commercial. Book your session today.",
 };
 
-// Use one of the portfolio photos as the hero background
-const HERO_PUBLIC_ID = "miphotography/portfolio/IMG_9112";
+// Hero background photo
+const HERO_PUBLIC_ID = "miphotography/portfolio/IMG_1606";
+
+// Featured packages shown on home page (3 photo-only + 3 photo+video)
+const FEATURED_PACKAGES = [
+  PHOTO_ONLY_PACKAGES.find((p) => p.id === "amamre")!,
+  PHOTO_ONLY_PACKAGES.find((p) => p.id === "awareso")!,
+  PHOTO_ONLY_PACKAGES.find((p) => p.id === "grande")!,
+  PHOTO_VIDEO_PACKAGES.find((p) => p.id === "miphoto")!,
+  PHOTO_VIDEO_PACKAGES.find((p) => p.id === "love-is-here")!,
+  PHOTO_VIDEO_PACKAGES.find((p) => p.id === "premium")!,
+];
 
 // Show 12 photos in the homepage preview grid
 const PREVIEW_PHOTOS = PORTFOLIO_PHOTOS.slice(0, 12);
@@ -36,7 +46,7 @@ export default function HomePage() {
 
       <main>
         {/* Hero */}
-        <Hero imageUrl={heroImageUrl} imageAlt="Miphotography wedding photography" />
+        <Hero imageUrl={heroImageUrl} imageAlt="Miphotographer wedding photography" />
 
         {/* Portfolio preview */}
         <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -93,8 +103,8 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {ALL_BOOKABLE_PACKAGES.map((pkg, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {FEATURED_PACKAGES.map((pkg, i) => (
               <PackageCard key={pkg.id} pkg={pkg} featured={pkg.id === "awareso"} index={i} />
             ))}
           </div>
@@ -104,7 +114,7 @@ export default function HomePage() {
               href="/services"
               className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-[#6B6860] hover:text-[#C4A882] transition-colors"
             >
-              View extras & backdrops <ArrowRight size={12} />
+              View all packages & extras <ArrowRight size={12} />
             </Link>
           </div>
         </section>

@@ -83,7 +83,7 @@ export function SettingsForm({ initial }: { initial: AirtableSettings | null }) 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelClass}>Photographer Name</label>
-              <input value={data.photographerName} onChange={set("photographerName")} className={inputClass} placeholder="Miphotography" />
+              <input value={data.photographerName} onChange={set("photographerName")} className={inputClass} placeholder="Miphotographer" />
             </div>
             <div>
               <label className={labelClass}>Tagline</label>

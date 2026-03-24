@@ -17,8 +17,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Miphotography | Professional Photography",
-    template: "%s | Miphotography",
+    default: "Miphotographer | Professional Photography",
+    template: "%s | Miphotographer",
   },
   description:
     "Premium photography services — weddings, portraits, and commercial. Book your session today.",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: process.env.NEXT_PUBLIC_APP_URL,
-    siteName: "Miphotography",
+    siteName: "Miphotographer",
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
   twitter: { card: "summary_large_image" },

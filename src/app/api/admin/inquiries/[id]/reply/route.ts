@@ -4,7 +4,7 @@ import { findById, update, Tables } from "@/lib/airtable";
 import { sendEmail, inquiryReplyEmail } from "@/lib/email";
 import type { AirtableInquiry } from "@/lib/airtable";
 
-const ADMIN_NAME = process.env.ADMIN_NAME ?? "Miphotography";
+const ADMIN_NAME = process.env.ADMIN_NAME ?? "Miphotographer";
 
 interface Ctx { params: Promise<{ id: string }> }
 

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createInviteLink } from "@/lib/firebase-admin";
 import { sendEmail, inviteEmail } from "@/lib/email";
 
-const ADMIN_NAME = process.env.ADMIN_NAME ?? "Miphotography";
+const ADMIN_NAME = process.env.ADMIN_NAME ?? "Miphotographer";
 
 export async function POST(req: NextRequest) {
   const { email, name } = await req.json() as { email?: string; name?: string };

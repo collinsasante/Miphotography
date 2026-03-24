@@ -5,7 +5,7 @@ import { findAll, create, update, Tables } from "@/lib/airtable";
 import { sendEmail, inviteEmail } from "@/lib/email";
 import type { AirtableUser } from "@/lib/airtable";
 
-const ADMIN_NAME = process.env.ADMIN_NAME ?? "Miphotography";
+const ADMIN_NAME = process.env.ADMIN_NAME ?? "Miphotographer";
 const COOKIE = "__session";
 
 async function requireAdmin(req: NextRequest) {

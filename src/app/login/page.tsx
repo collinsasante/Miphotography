@@ -135,7 +135,7 @@ function LoginForm() {
         {/* Logo */}
         <div className="text-center mb-10">
           <div className="flex items-center justify-center mb-3">
-            <Image src="/logo.png" alt="Miphotography" width={160} height={40} className="object-contain h-9 w-auto" />
+            <Image src="/logo.png" alt="Miphotographer" width={160} height={40} className="object-contain h-9 w-auto" />
           </div>
           <p className="text-[10px] tracking-widest uppercase text-[#6B6860]">Client Portal</p>
         </div>

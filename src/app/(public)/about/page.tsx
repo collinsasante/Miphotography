@@ -28,7 +28,7 @@ export default function AboutPage() {
             </h1>
             <div className="space-y-5 text-[#6B6860] leading-relaxed">
               <p>
-                I&apos;m Miphotography — a professional photographer based in [City], specialising in weddings, portraits, and commercial work. My style blends editorial precision with warmth and authenticity.
+                We are Miphotographer — a professional photography team based in Accra, Ghana, specialising in weddings, portraits, and commercial work. My style blends editorial precision with warmth and authenticity.
               </p>
               <p>
                 I believe great photography isn&apos;t just about technical skill — it&apos;s about connection. The moments I treasure most are the ones my clients never saw coming: a laugh that caught them off guard, a stolen glance between partners, a child discovering something magical.
@@ -69,7 +69,7 @@ export default function AboutPage() {
           <p className="font-serif text-2xl sm:text-3xl text-white italic leading-relaxed">
             &ldquo;I don&apos;t capture moments. I capture the feeling between them.&rdquo;
           </p>
-          <p className="text-[#C4A882] text-xs tracking-widest uppercase mt-6">— Miphotography</p>
+          <p className="text-[#C4A882] text-xs tracking-widest uppercase mt-6">— Miphotographer</p>
         </div>
       </section>
     </div>
