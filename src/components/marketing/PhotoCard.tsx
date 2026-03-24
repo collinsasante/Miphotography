@@ -9,9 +9,10 @@ interface PhotoCardProps {
   index?: number;
   /** aspect-ratio class e.g. "aspect-[4/5]" */
   aspect?: string;
+  onClick?: () => void;
 }
 
-export function PhotoCard({ publicId, index = 0, aspect = "aspect-[4/5]" }: PhotoCardProps) {
+export function PhotoCard({ publicId, index = 0, aspect = "aspect-[4/5]", onClick }: PhotoCardProps) {
   const src = getImageUrl(publicId, { width: 800, quality: "auto" });
   const blur = getBlurDataUrl(publicId);
 
@@ -21,11 +22,12 @@ export function PhotoCard({ publicId, index = 0, aspect = "aspect-[4/5]" }: Phot
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: (index % 6) * 0.06 }}
-      className={`relative overflow-hidden ${aspect} group`}
+      className={`relative overflow-hidden ${aspect} group ${onClick ? "cursor-pointer" : ""}`}
+      onClick={onClick}
     >
       <Image
         src={src}
-        alt="Miphotography"
+        alt="Miphotographer"
         fill
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         className="object-cover transition-transform duration-700 group-hover:scale-105"

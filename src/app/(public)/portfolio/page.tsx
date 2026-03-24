@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import { PhotoCard } from "@/components/marketing/PhotoCard";
+import { Lightbox } from "@/components/marketing/Lightbox";
 import { PORTFOLIO_PHOTOS } from "@/lib/data/portfolio";
 
 const PAGE_SIZE = 24;
+const ALL_IDS = PORTFOLIO_PHOTOS.map((p) => p.publicId);
 
 export default function PortfolioPage() {
   const [visible, setVisible] = useState(PAGE_SIZE);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const shown = PORTFOLIO_PHOTOS.slice(0, visible);
   const hasMore = visible < PORTFOLIO_PHOTOS.length;
@@ -25,7 +28,12 @@ export default function PortfolioPage() {
         {/* Photo grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
           {shown.map((photo, i) => (
-            <PhotoCard key={photo.publicId} publicId={photo.publicId} index={i} />
+            <PhotoCard
+              key={photo.publicId}
+              publicId={photo.publicId}
+              index={i}
+              onClick={() => setLightboxIndex(i)}
+            />
           ))}
         </div>
 
@@ -41,6 +49,17 @@ export default function PortfolioPage() {
           </div>
         )}
       </div>
+
+      {/* Lightbox */}
+      {lightboxIndex !== null && (
+        <Lightbox
+          photos={ALL_IDS}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onPrev={() => setLightboxIndex((i) => Math.max(0, (i ?? 0) - 1))}
+          onNext={() => setLightboxIndex((i) => Math.min(ALL_IDS.length - 1, (i ?? 0) + 1))}
+        />
+      )}
     </div>
   );
 }
