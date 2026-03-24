@@ -38,7 +38,7 @@ const FEATURED_PACKAGES = [
 const PREVIEW_PHOTOS = PORTFOLIO_PHOTOS.slice(0, 12);
 
 export default function HomePage() {
-  const heroImageUrl = getImageUrl(HERO_PUBLIC_ID, { width: 1920, quality: 80 });
+  const heroImageUrl = getImageUrl(HERO_PUBLIC_ID, { width: 1920, quality: 80, crop: "fill", gravity: "face" });
 
   return (
     <>
